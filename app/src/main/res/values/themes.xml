@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AssignmentListed" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+    <style name="Theme.AssignmentListed" parent="Base.Theme.AssignmentListed">
+        <!-- Add this line to inherit the fullscreen behavior from the base theme -->
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>
