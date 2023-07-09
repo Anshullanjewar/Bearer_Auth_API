@@ -2,9 +2,7 @@ package com.example.assignmentlisted.fragments
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Color.GRAY
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,43 +10,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assignmentlisted.R
-import com.example.assignmentlisted.data.ServerResponse
-import com.example.assignmentlisted.data.network.ApiService
 import com.example.assignmentlisted.databinding.FragmentLinkBinding
 import com.example.assignmentlisted.util.ApiState
 import com.example.assignmentlisted.vm.MainViewModel
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class LinkFragment : Fragment() {
@@ -56,9 +32,9 @@ class LinkFragment : Fragment() {
     private var binding: FragmentLinkBinding? = null
     private val viewModel: MainViewModel by viewModels()
 
-    private var btnTop: Button?=null
-    private var btnRecent: Button?=null
     private var linkContainer: FrameLayout?=null
+    private val tL= TopLinkFragment()
+    private val rL= RecentLinkFragment()
 
 
 
@@ -67,24 +43,33 @@ class LinkFragment : Fragment() {
     ): View? {
         binding = FragmentLinkBinding.inflate(inflater, container, false)
 
-        btnTop =view?.findViewById(R.id.topbtn)
-        btnRecent =view?.findViewById(R.id.recentbtn)
-        linkContainer=view?.findViewById(R.id.fragmentLinkContainer)
 
-        btnRecent?.setTextColor(Color.GRAY)
-        btnRecent?.setBackgroundColor(Color.TRANSPARENT)
+        linkContainer = binding?.fragmentLinkContainer
 
-        btnTop?.setOnClickListener {
-            replaceFragment((TopLinkFragment()))
-            btnRecent?.setBackgroundColor(Color.BLUE)
+
+        binding?.recentbtn?.setBackgroundResource(android.R.color.transparent)
+        binding?.recentbtn?.setTextColor(Color.GRAY)
+
+        replaceFragment(tL)
+        binding?.topbtn?.setOnClickListener {
+            replaceFragment(tL)
+            binding?.topbtn?.setBackgroundResource(android.R.color.holo_blue_light)
+            binding?.recentbtn?.setBackgroundResource(android.R.color.transparent)
+            binding?.recentbtn?.setTextColor(Color.GRAY)
+            binding?.topbtn?.setTextColor(Color.WHITE)
+
+
+
         }
 
-        btnRecent?.setOnClickListener {
-            replaceFragment((RecentLinkFragment()))
-            btnTop?.setTextColor(Color.GRAY)
-            btnTop?.setBackgroundColor(Color.TRANSPARENT)
-            btnRecent?.setBackgroundColor(Color.BLUE)
-            btnRecent?.setTextColor(Color.GRAY)
+        binding?.recentbtn?.setOnClickListener {
+            replaceFragment(rL)
+
+            binding?.recentbtn?.setBackgroundResource(android.R.color.holo_blue_light)
+            binding?.topbtn?.setBackgroundResource(android.R.color.transparent)
+            binding?.topbtn?.setTextColor(Color.GRAY)
+            binding?.recentbtn?.setTextColor(Color.WHITE)
+
         }
 
 
@@ -102,7 +87,7 @@ class LinkFragment : Fragment() {
         binding = null
     }
 //////////////////////////////////////////////////////////////////////////////////////////////
-    fun greetings() {
+    private fun greetings() {
         val calendar = Calendar.getInstance()
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
 
@@ -143,6 +128,8 @@ class LinkFragment : Fragment() {
                             binding?.cvWhatsapp?.setOnClickListener {
                                 openWhatsApp(supportWhatsappNumber)
                             }
+
+                                populateLineChart(overallUrlChart)
 
 
                         }
@@ -198,33 +185,28 @@ class LinkFragment : Fragment() {
 
 
     private fun replaceFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragmentLinkContainer, fragment)
-            .commit()
+        childFragmentManager?.beginTransaction()
+            ?.replace(R.id.fragmentLinkContainer, fragment)
+            ?.commit()
+
     }
 
 
-    private fun setupchart(){
-        val lineChart = binding?.lineChart
+    private fun populateLineChart(data: Map<String, Int>) {
+        val entries = ArrayList<Entry>()
 
-        lineChart?.clear()
 
-        val entries = mutableListOf<Entry>()
-        viewModel.overallUrlChart.value?.forEach { (key, value) ->
-            entries.add(Entry(key.toFloat(), value.toFloat()))
+        var index = 0
+        for ((key, value) in data) {
+            entries.add(Entry(index.toFloat(), value.toFloat()))
+            index++
         }
-        val dataSet = LineDataSet(entries, "URL Chart")
 
-// Customize the appearance of the line chart
-        dataSet.color = Color.BLUE
-        dataSet.valueTextColor = Color.BLACK
-
-// Create a LineData object and set it to the chart
+        val dataSet = LineDataSet(entries, "Chart Label")
         val lineData = LineData(dataSet)
-        lineChart?.data = lineData
 
-// Refresh the chart
-        lineChart?.invalidate()
+        binding?.lineChart?.data = lineData
+        binding?.lineChart?.invalidate()
     }
 
 

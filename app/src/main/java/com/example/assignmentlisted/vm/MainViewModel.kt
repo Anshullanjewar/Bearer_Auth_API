@@ -15,7 +15,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignmentlisted.R
-import com.example.assignmentlisted.adapters.TopLinkAdapter
 import com.example.assignmentlisted.data.RecentLink
 import com.example.assignmentlisted.data.ServerResponse
 import com.example.assignmentlisted.data.TopLink
@@ -32,7 +31,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
 
     val data = mainRepository.getDetails()
     val overallUrlChart = MutableLiveData<Map<String, Int>>()
-     val topLinks = MutableLiveData<List<TopLink>>()
+    val topLinks = MutableLiveData<List<TopLink>>()
     val recentLinks = MutableLiveData<List<RecentLink>>()
 
 

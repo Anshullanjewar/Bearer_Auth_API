@@ -17,28 +17,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_linkName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="123"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/iv_icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_linkName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:text="123"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_linkClick"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_linkDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="Total clicks"
-        android:textColor="@color/grey"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/iv_icon"
-        app:layout_constraintTop_toBottomOf="@+id/tv_linkName" />
+        <TextView
+            android:id="@+id/tv_linkDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Total clicks"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_linkName" />
 
     <TextView
         android:id="@+id/tv_linkClick"
@@ -59,7 +62,7 @@
         android:layout_margin="8dp"
         android:text="Clicks"
         android:textColor="@color/grey"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_linkClick" />
 
@@ -75,19 +78,22 @@
         android:background="@color/primaryL">
 
     </View>
-    <TextView
-        android:id="@+id/tv_linkCopy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="Clicks"
-        android:textStyle="bold"
-        android:textColor="@color/primary"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/viewBlue"
-        app:layout_constraintTop_toTopOf="@id/viewBlue" />
 
-    <ImageView
+        <TextView
+            android:id="@+id/tv_linkCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Clicks"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/iv_copyIcon"
+            app:layout_constraintHorizontal_bias="0.026"
+            app:layout_constraintStart_toStartOf="@id/viewBlue"
+            app:layout_constraintTop_toTopOf="@id/viewBlue" />
+
+        <ImageView
         android:id="@+id/iv_copyIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

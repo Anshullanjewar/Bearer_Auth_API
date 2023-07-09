@@ -16,7 +16,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignmentlisted.R
-import com.example.assignmentlisted.adapters.TopLinkAdapter
+import com.example.assignmentlisted.adapters.TopLinksAdapter
 import com.example.assignmentlisted.data.ServerResponse
 import com.example.assignmentlisted.data.TopLink
 import com.example.assignmentlisted.data.repository.MainRepository
@@ -30,29 +30,62 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class TopLinkFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
-    private var _binding: TopLinksBinding? = null
-    private val binding get() = _binding!!
+    private var binding: TopLinksBinding? = null
+
+    private  var recyclerView: RecyclerView ? = null
+    private  var adapter : TopLinksAdapter ? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = TopLinksBinding.inflate(inflater, container, false)
-        val view = binding.root
+        binding = TopLinksBinding.inflate(inflater, container, false)
 
-        val recyclerView: RecyclerView = binding.rvTopLink
-        val adapter = TopLinkAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView = binding?.rvTopLink
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.topLinks.observe(viewLifecycleOwner) { topLinks ->
-            adapter.setTopLinks(topLinks)
-        }
 
-        return view
+        getDetails()
+
+        return binding?.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
+
+
+    private fun getDetails() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+
+                viewModel.data.collect {
+                    when (it) {
+                        is ApiState.Success -> {
+
+                            val topL = it.data.data.top_links
+                            viewModel.topLinks.value = topL
+
+                            recyclerView.apply{
+                                adapter = TopLinksAdapter(topL)
+                                recyclerView?.adapter = adapter                            }
+
+                        }
+
+                        is ApiState.Failure -> {
+                            Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        ApiState.Loading -> {
+                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 
